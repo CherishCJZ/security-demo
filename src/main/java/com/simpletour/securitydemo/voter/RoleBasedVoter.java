@@ -28,6 +28,13 @@ public class RoleBasedVoter implements AccessDecisionVoter<FilterInvocation> {
     private static final String fullyAuthenticated = "fullyAuthenticated";
     private static final String rememberMe = "rememberMe";
 
+    private static final List<String> DEFAULT_AUTHORITY = new ArrayList<>();
+
+
+    static {
+        DEFAULT_AUTHORITY.add(permitAll);
+    }
+
 
     @Override
     public boolean supports(ConfigAttribute attribute) {
@@ -43,7 +50,7 @@ public class RoleBasedVoter implements AccessDecisionVoter<FilterInvocation> {
     @Override
     public int vote(Authentication authentication, FilterInvocation filterInvocation, Collection<ConfigAttribute> attributes) {
         String requestUrl = filterInvocation.getRequestUrl();
-        List<String> urlAuthorities = Database.getUrlAuthorities(requestUrl, new ArrayList<>());
+        List<String> urlAuthorities = Database.getUrlAuthorities(requestUrl, DEFAULT_AUTHORITY);
 
         if (urlAuthorities.contains("permitAll")) {
             return 1;

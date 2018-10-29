@@ -2,13 +2,8 @@ package com.simpletour.securitydemo.config;
 
 import com.simpletour.securitydemo.metasourece.MyMetaSource;
 import com.simpletour.securitydemo.service.UserDetailServiceImpl;
-import com.simpletour.securitydemo.voter.RoleBasedVoter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,12 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @Author: chenjunzhou
@@ -45,10 +37,8 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Resource
     private MyMetaSource myMetaSource;
 
-//    @Resource
-//    private AccessDecisionManager accessDecisionManager;
-//
-
+    @Resource
+    private AccessDecisionManager accessDecisionManager;
 
 
     @Override
@@ -61,7 +51,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
 
 //                .authorizeRequests().withObjectPostProcessor(objectPostProcessor())
-                .authorizeRequests().accessDecisionManager(accessDecisionManager()).anyRequest().anonymous()
+                .authorizeRequests().accessDecisionManager(accessDecisionManager).anyRequest().permitAll()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .and()
@@ -101,17 +91,4 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             }
         };
     }*/
-
-
-    @Bean
-    public AccessDecisionManager accessDecisionManager() {
-        List<AccessDecisionVoter<? extends Object>> decisionVoters
-                = Arrays.asList(
-                new WebExpressionVoter(),
-                // new RoleVoter(),
-                new RoleBasedVoter(),
-                new AuthenticatedVoter());
-        return new UnanimousBased(decisionVoters);
-    }
-
 }

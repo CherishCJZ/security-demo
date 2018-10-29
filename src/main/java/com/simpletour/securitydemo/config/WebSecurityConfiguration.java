@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,9 +33,12 @@ public class WebSecurityConfiguration {
 
     @Bean
     public AccessDecisionManager accessDecisionManager() {
-        List<AccessDecisionVoter<? extends Object>> decisionVoters = Collections.singletonList(
-                new RoleBasedVoter());
+        List<AccessDecisionVoter<?>> decisionVoters
+                = Arrays.asList(
+                new WebExpressionVoter(),
+                // new RoleVoter(),
+                new RoleBasedVoter(),
+                new AuthenticatedVoter());
         return new UnanimousBased(decisionVoters);
     }
-
 }

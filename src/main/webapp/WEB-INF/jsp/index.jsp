@@ -5,7 +5,7 @@
   Time: 10:05
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page isELIgnored="false" %>
 <html>
@@ -26,12 +26,12 @@
 </sec:authorize>
 
 <sec:authorize access="isAuthenticated()">
-    <a href="/logout">退出</a>
-    <a href="/hello">hello</a>
+    <a href="${pageContext.request.contextPath}/logout">退出</a>
+    <a href="${pageContext.request.contextPath}/hello">hello</a>
 </sec:authorize>
 
-<sec:authorize url="/logout">
-    退出
+<sec:authorize url="${pageContext.request.contextPath}/logout">
+    everyone can see this.
 </sec:authorize>
 </body>
 </html>

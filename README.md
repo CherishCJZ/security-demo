@@ -1,2 +1,5 @@
 # security-demo
 spring-security 源码阅读工程
+
+目前自定义的accessDecisionManager其实只有RoleBasedVoter是有用的。WebExpressionVoter配置了只负责CustomWebSecurityConfigurer中配置的permitAll,表示全部通过，
+AuthenticationVoter会返回弃权票，所以主要取决于RoleBasedVoter,这里需要改进。
